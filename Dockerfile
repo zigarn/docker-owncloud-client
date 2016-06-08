@@ -4,9 +4,7 @@ MAINTAINER Alexandre Garnier <zigarn@gmail.com>
 
 # Install owncloud-client (2.2.0)
 RUN echo -e '@edge http://dl-cdn.alpinelinux.org/alpine/edge/main\n@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories && \
-    apk update && \
-    apk add owncloud-client@testing && \
-    rm -f /var/cache/apk/*
+    apk add --no-cache owncloud-client@testing
 
 # Data volumes
 VOLUME /data /log
