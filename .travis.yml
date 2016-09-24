@@ -1,0 +1,25 @@
+language: shell
+
+sudo: required
+
+services:
+    - docker
+
+env:
+    global:
+        - REPO=zigarn/owncloud-client
+        - secure: "SvxjpOCXbld+eyxGeS/K+wPuzwzYqJzIe/Qap30s3JJJMAmL3TqdiHSEh/Ot5liJUwJ5yLymp+VcjVSpWU3YUiaeh00rlP7Xfc2hjZFREVSGep+NKZBSLXOsQrZFFSCWa+fiGhrD7RXCGT+QId0dd24pDRUtY2jApwn0HO8x962BNKVheCKNw4PWgnClVPEAZx4YGPK3g0gW6zAIbcBbEpVH6Xn7HEANLw86ZDEK7CPVWZKN/Fo5r2BMzSG9BWuzOqhfqxNw03WDIyUD98dWm805DT3SzqYf5Rv+ogvZ9oj7cj/2zWND/Hg6qRS0r48oletezqAQ+E8VOI/Ba1FT6al3Xkynrq2FOaKdeTf4HVsg87E4Xm03yLuCbaynXt83dHdHBwlqnx7wL4TScs9QfsK1b8/J62+fcwjV76/h8+ACW08M/KUH+VDd4Pw+BAMg/9rXDrhfvq9Tuz+vnkNQs5rbDsE5+yZRkMZxyPJs4tKfpGfJ7gKeh36yiNo2CzeQHK6KPStnDTW9UjvEsqc748k996LNgvoqNfnvfv/duapEe/XDiz2ZxAQocAqjG2Dy43l4R7klfOpGQLbwOoVFY56/+63VmckENCcbB5qLgxCDlh1BB8fAHfkGbN07s5Euk4AVk0eHMF1HFWZntSPbTfLwQBEAnYf6jJmTV8/M45I=" # DOCKER_USER
+        - secure: "cFzENiJ7yHqsCPE0kkUOC3YkWLMvGF3P2snGqxUtd8orBzfU+yCuxYFdifaUJ4KzlrE1efuw4Pxb1aNrnxcIGTM2hFSQpuqd48USbf8bfp8WsyfnrPn7kkDtktn36zpj1BfyHBGcCCHM/RsZnzIvxyichUoHLq6YxSOJdWURkOW6bJPDrF55MWHLt+GANIKIa61jb78orCADg4rfUiEsmPyRwFWjrpkNXOwlPyBGSfxeXv5H6L/Em14T8kv+gR1QMmXzApMfMjnu4n0zL7oIvnjVta57i8eI5iKiUEzIlkcyTjEzIWX7qcIOhmZ3RGP1W1AOm8Lazr+naRFBszpGLghAsXWMS0uf95GPTY2SDOG434/Mcn1Cg4uYidq2V2hvkph0lbMy/TSkkp5EEOMXL2L6g0fpG08tpb4iU1+nnbSncCP9ka2ZZdXOLfwBKxYcDjupnOAHrxKE1xiPKzZwU/1Iyktx4sCktdNOYkX9k3LWzlvZIE+d1Ld/U5s8QTh/SrQxpLhNVav7b2CB1sHXb8GYx+r63OXfmtf46POgHXdclXGZTZ03bfp/qc8+UKsFvXDGUQxqhv9cfyFnMgqxCNtLaG57nuDF4+hn/lEbFPt9Y8rg+syKG3U1iJOzAd/ZRmUlmHO1mgndjRb5+cyYGZxV4M6OUAuMy3Ai0RIg3OA=" # DOCKER_PASS
+
+script:
+    - export VCS_REF=`git rev-parse --short HEAD`
+    - export BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
+    - export VERSION=`git describe --always HEAD`
+    - docker build --build-arg VCS_REF=$VCS_REF --build-arg BUILD_DATE=$BUILD_DATE --build-arg VERSION=$VERSION -t $REPO:$TRAVIS_COMMIT .
+
+after_success:
+    - docker login --username $DOCKER_USER --password $DOCKER_PASS
+    - export TAG=`if [ "$TRAVIS_TAG" != "" ]; then echo $TRAVIS_TAG; elif [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
+    - docker tag $REPO:$TRAVIS_COMMIT $REPO:$TAG
+    - docker push $REPO:$TAG
+    - curl -X POST 'https://hooks.microbadger.com/images/zigarn/owncloud-client/KmaRqLzPT6n91bYKd-fcmzjN2tY='

@@ -1,5 +1,11 @@
 # ownCloud client docker image for ownCloud synchronization
 
+[![Build Status](https://travis-ci.org/zigarn/docker-owncloud-client.svg?branch=master)](https://travis-ci.org/zigarn/docker-owncloud-client)
+
+[![Image Metadata](https://images.microbadger.com/badges/image/zigarn/owncloud-client.svg)](https://microbadger.com/images/zigarn/owncloud-client)
+[![version](https://images.microbadger.com/badges/version/zigarn/owncloud-client.svg)](https://microbadger.com/images/zigarn/owncloud-client)
+[![commit](https://images.microbadger.com/badges/commit/zigarn/owncloud-client.svg)](http://microbadger.com/images/zigarn/owncloud-client)
+
 ## Configuration
 
 Create a configuration folder with 2 files :
