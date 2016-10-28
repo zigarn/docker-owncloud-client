@@ -22,6 +22,7 @@ Launch the docker image with:
    - `/log`: folder for sync logs
    - `/conf`: folder containing configuration files
  - Env:
+   - `LANG`: the `LANG` for encoding in file names. Defaults to 'C.UTF-8'
    - `SERVER`: the ownCloud server URL
    - `PERIODICITY`: sync periodicity in [crontab](http://linux.die.net/man/5/crontab) format (but DO NOT USE @xxx formats). Defaults to `0 * * * *` (hourly)
 
@@ -32,6 +33,7 @@ docker run --detach \
   --volume ~/owncloud-sync:/data \
   --volume /var/log:/log \
   --volume /etc/owncloud-sync/:/conf \
+  --env LANG=fr_FR.ISO-8859-15 \
   --env SERVER=http://owncloud.server.com/ \
   --env PERIODICITY='*/15 * * * *' \
   zigarn/owncloud-client

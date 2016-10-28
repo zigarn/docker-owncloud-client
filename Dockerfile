@@ -29,6 +29,7 @@ VOLUME /conf
 RUN ln -s /conf/.netrc ~/.netrc
 ENV SERVER ''
 ENV PERIODICITY '0 * * * *'
+ENV LANG 'C.UTF-8'
 
 # Synchronization
 ADD run_sync.sh /run_sync.sh
